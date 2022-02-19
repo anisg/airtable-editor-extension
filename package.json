@@ -1,0 +1,40 @@
+{
+  "name": "extension-save-to-notion",
+  "version": "0.7.0",
+  "scripts": {
+    "clean": "rm -rf dist && mkdir dist && mkdir ./dist/injectScripts && cp ./manifest.json dist/. && cp -r ./images dist/. && cp -r ./icons dist/. && cp ./src/popup.html dist/.",
+    "resetAll": "rm -rf ./node_modules ./dist ./src/options/build ./src/options/node_modules ./src/popup/build ./src/popup/node_modules  ./web-ext-artifacts",
+    "prebuild": "npm run clean",
+    "build": "npm-run-all build:*",
+    "prewatch": "npm run clean",
+    "build:injectscripts": "tsc                -t es2015 ./src/injectScripts/main.ts ./src/injectScripts/background.ts --outDir ./dist/",
+    "watch:injectscripts": "tsc-watch --noClear -t es2015  ./src/injectScripts/main.ts ./src/injectScripts/background.ts --outDir ./dist/",
+    "watch": "npm-run-all watch:*",
+    "dev": "npm run watch",
+    "build:firefox": "web-ext --source-dir ./dist build --overwrite-dest",
+    "format": "prettier --write \"src/**/*.{ts,tsx,md}\"",
+    "script:open-workspace": "sh scripts/open-workspace.sh",
+    "script:build-and-deploy": "sh scripts/build-and-deploy.sh"
+  },
+  "watch": {
+    "build:shared_code": {
+      "patterns": [
+        "src/shared_code"
+      ],
+      "extensions": "ts,tsx",
+      "verbose": true
+    }
+  },
+  "author": "Anis Craheix",
+  "devDependencies": {
+    "@types/chrome": "0.0.91",
+    "awesome-typescript-loader": "^5.2.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.0.5",
+    "tsc-watch": "^4.2.9",
+    "typescript": "3.7.3"
+  },
+  "dependencies": {
+    "uuid": "^8.3.2"
+  }
+}
