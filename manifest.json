@@ -13,7 +13,7 @@
     {
       "matches": ["https://*.airtable.com/app*"],
       "css": [],
-      "js": ["main.js"]
+      "js": ["injectScript/injectScript.js"]
     }
   ],
   "permissions": [
@@ -24,7 +24,7 @@
   ],
   "web_accessible_resources": ["images/*"],
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["background/background.js"],
     "persistent": true
   },
   "browser_action": {
