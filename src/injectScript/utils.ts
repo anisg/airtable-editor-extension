@@ -243,3 +243,57 @@ export function hashCode(s: string) {
   }
   return `${hash}`;
 }
+
+export function addCssStyle(styleString: string) {
+  const style = document.createElement("style");
+  style.textContent = styleString;
+  document.head.append(style);
+}
+
+export function triggerEventOnSpecificChild(
+  targetNode: Element,
+  childCssSelector,
+  callback: (eventAction: "created" | "deleted", childEl: Element) => void
+) {
+  var config = {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  };
+  var observer = new MutationObserver((mutationsList) => {
+    mutationsList.forEach((mutation) => {
+      if (mutation.type != "childList") return;
+      if (mutation.target !== targetNode) return;
+      // check addition
+      const createdEl: Element = [...mutation.addedNodes].find(
+        (el: any) => el.matches && el.matches(childCssSelector)
+      ) as any;
+      createdEl && callback("created", createdEl);
+
+      // check removal
+      const removedEl: Element = [...mutation.removedNodes].find(
+        (el: any) => el.matches && el.matches(childCssSelector)
+      ) as any;
+      removedEl && callback("deleted", null);
+    });
+  });
+  observer.observe(targetNode, config);
+}
+
+export function createHtmlElement(str: string) {
+  var child = document.createElement("div");
+  child.innerHTML = str;
+  return child.firstChild;
+}
+
+export async function repeatWhileNotTrue(
+  fn,
+  { intervalMs, timeoutMs }: { intervalMs: number; timeoutMs: number }
+) {
+  let elapsedMs = 0;
+  while (elapsedMs < timeoutMs && !fn()) {
+    await sleep(intervalMs);
+    elapsedMs += intervalMs;
+  }
+  return elapsedMs;
+}

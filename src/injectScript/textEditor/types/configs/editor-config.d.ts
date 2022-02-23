@@ -1,7 +1,7 @@
-import {ToolConstructable, ToolSettings} from '../tools';
-import {API, BlockAPI, LogLevels, OutputData} from '../index';
-import {SanitizerConfig} from './sanitizer-config';
-import {I18nConfig} from './i18n-config';
+import { ToolConstructable, ToolSettings } from "../tools";
+import { API, BlockAPI, LogLevels, OutputData } from "../index";
+import { SanitizerConfig } from "./sanitizer-config";
+import { I18nConfig } from "./i18n-config";
 
 export interface EditorConfig {
   /**
@@ -37,7 +37,7 @@ export interface EditorConfig {
   /**
    * First Block placeholder
    */
-  placeholder?: string|false;
+  placeholder?: string | false;
 
   /**
    * Define default sanitizer configuration
@@ -54,8 +54,8 @@ export interface EditorConfig {
    * Map of Tools to use
    */
   tools?: {
-    [toolName: string]: ToolConstructable|ToolSettings;
-  }
+    [toolName: string]: ToolConstructable | ToolSettings;
+  };
 
   /**
    * Data to render on Editor start
@@ -97,7 +97,7 @@ export interface EditorConfig {
   /**
    * Defines default toolbar for all tools.
    */
-  inlineToolbar?: string[]|boolean;
+  inlineToolbar?: string[] | boolean;
 
   /**
    * Common Block Tunes list. Will be added to all the blocks which do not specify their own 'tunes' set
