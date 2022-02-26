@@ -7,7 +7,7 @@ const defaultText = `? words ---------------------------------------------------
 const ID_EDITOR = "web-ext-text-editor";
 
 function bootstrapAirtableCss() {
-  /* remove blue outline on the new text editor */
+  // remove blue outline on the new text editor
   addCssStyle(`
   
  #${ID_EDITOR} [contenteditable='true']:focus {
@@ -21,6 +21,15 @@ function bootstrapAirtableCss() {
 `);
 }
 
+function fixEditorJsCss() {
+  // remove override css
+  addCssStyle(`
+  .ce-toolbar__actions {
+    position: absolute;
+    right: 100% !important;
+}
+  `);
+}
 function insertTextEditorEl(parentEl: Element) {
   parentEl.appendChild(
     createHtmlElement(`
@@ -32,25 +41,49 @@ function insertTextEditorEl(parentEl: Element) {
 }
 
 export type BuildTextEditorPayload = {
-  parentEl: Element;
+  editorContainerEl: HTMLDivElement;
   text: string;
-  airtableRowId: string;
-  airtableColumnId: string;
+  airtableContentEl?: HTMLDivElement;
 };
 
-function buildTextEditor({
-  parentEl,
+async function updateAirtableCell({
   text,
-  airtableRowId,
-  airtableColumnId,
-}: BuildTextEditorPayload) {
-  insertTextEditorEl(parentEl);
+  contentEl,
+}: {
+  contentEl: HTMLDivElement;
+  text: string;
+}) {
+  const trimmedText = text.trim();
+  contentEl.innerText = trimmedText;
+  contentEl.dispatchEvent(new Event("input", { bubbles: true }));
+}
 
-  const textEditor = createTextEditor({
+function buildTextEditor({
+  editorContainerEl,
+  text,
+  airtableContentEl,
+}: BuildTextEditorPayload) {
+  console.log("build text editor");
+  sleep(3000).then(() => {
+    updateAirtableCell({ text: "TEST", contentEl: airtableContentEl });
+  });
+  return;
+  console.log("insert HTML", editorContainerEl);
+  insertTextEditorEl(editorContainerEl);
+
+  airtableContentEl.addEventListener("paste", (event) => {
+    console.log("PASTE", event);
+  });
+
+  airtableContentEl.addEventListener("focus", (event) => {
+    console.log("FOCUS", event);
+  });
+
+  createTextEditor({
     id: ID_EDITOR,
     text,
     onChange: (text) => {
-      console.log("received", text);
+      updateAirtableCell({ text, contentEl: airtableContentEl });
     },
   });
 }
@@ -59,6 +92,7 @@ async function mainApp() {
   await sleep(500);
 
   bootstrapAirtableCss();
+  fixEditorJsCss();
 
   watchCellExpanded((action, payload) => {
     action === "created" &&

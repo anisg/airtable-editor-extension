@@ -15,8 +15,8 @@ function getHyperBaseContainerEl() {
 }
 
 export type CellExpandedPayload = {
-  contentEl: Element;
-  fieldEl: Element;
+  contentEl: HTMLDivElement;
+  fieldEl: HTMLDivElement;
   text: string;
 };
 

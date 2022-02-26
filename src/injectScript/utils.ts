@@ -283,7 +283,7 @@ export function triggerEventOnSpecificChild(
 export function createHtmlElement(str: string) {
   var child = document.createElement("div");
   child.innerHTML = str;
-  return child.firstChild;
+  return child;
 }
 
 export async function repeatWhileNotTrue(

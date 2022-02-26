@@ -1,4 +1,4 @@
-import { debounceImmediate } from "../utils";
+import { debounceImmediate, sleep } from "../utils";
 import IEditorJS, { API, OutputData } from "./types";
 const EditorJS = require("./editor");
 
@@ -57,7 +57,7 @@ export function createTextEditor({
   text,
 }: TextEditorParams): TextEditor {
   const editor = new TextEditor({ id, onChange });
-  editor.editor.isReady.then(() => {
+  editor.editor.isReady.then(async () => {
     text && editor.setText(text);
   });
   return editor;
