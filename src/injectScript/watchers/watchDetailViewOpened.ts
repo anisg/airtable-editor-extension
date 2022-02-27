@@ -45,7 +45,7 @@ export function watchDetailViewOpened(
     async (action, el) => {
       console.log("watchDetailViewOpened 1");
       //check to ensure it is the detail view dialog that opened
-      const dialogEl: HTMLDivElement = el.querySelector(
+      const dialogEl: HTMLDivElement = el?.querySelector(
         `div[aria-label="Detail view dialog"]`
       );
       if (!dialogEl) return;

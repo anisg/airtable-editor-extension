@@ -1,6 +1,7 @@
 import { debounceImmediate, sleep } from "../utils";
 import IEditorJS, { API, OutputData } from "./types";
 const EditorJS = require("./editor");
+const Header = require("@editorjs/header");
 
 const prefixSeparator =
   "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
@@ -32,6 +33,10 @@ class TextEditor {
       onChange: (api: API, event: CustomEvent) => {
         console.log("EVENT ON CHANGE", api, event);
         this.debouncedSave();
+      },
+
+      tools: {
+        header: Header,
       },
     });
   }

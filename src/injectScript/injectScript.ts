@@ -29,6 +29,17 @@ function fixEditorJsCss() {
     position: absolute;
     right: 100% !important;
 }
+
+/* works only for detail view */
+#${ID_EDITOR} [contenteditable='true'] {
+  border-width: 0 !important;
+}
+
+.ce-settings {
+  -webkit-box-sizing: content-box !important;
+  box-sizing: content-box !important;
+}
+
   `);
 }
 function insertTextEditorEl(parentEl: Element) {
