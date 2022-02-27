@@ -48,8 +48,6 @@ export function injectTextEditorOnCellExpended(payload: CellExpandedPayload) {
     e.stopPropagation();
   });
 
-  // todo: determine the airtable row id & column id
-
   return {
     airtableContentEl: payload.contentEl,
     editorContainerEl: container,

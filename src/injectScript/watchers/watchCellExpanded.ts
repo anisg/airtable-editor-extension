@@ -7,10 +7,10 @@ import {
 
 const CSS_SELECTOR_HYPERBASE_CONTAINER = `#hyperbaseContainer`;
 const CSS_SELECTOR_CHILD_TOP_LAYER = `div.noevents.child-events`;
-const CSS_SELECTOR_CHILD_MULTILINE_FIELD = `div[data-columntype="multilineText"]`;
+export const CSS_SELECTOR_CHILD_MULTILINE_FIELD = `div[data-columntype="multilineText"]`;
 const CSS_SELECTOR_CHILD_CONTENT_FIELD = `div[data-columntype="multilineText"] .contentEditableTextbox`;
 
-function getHyperBaseContainerEl() {
+export function getHyperBaseContainerEl() {
   return document.querySelector(CSS_SELECTOR_HYPERBASE_CONTAINER);
 }
 
@@ -19,6 +19,19 @@ export type CellExpandedPayload = {
   fieldEl: HTMLDivElement;
   text: string;
 };
+
+export function createMultilinePayload(
+  fieldEl: HTMLDivElement
+): CellExpandedPayload {
+  const contentEl: HTMLDivElement = fieldEl?.querySelector(
+    ".contentEditableTextbox"
+  );
+  return {
+    contentEl,
+    fieldEl: fieldEl,
+    text: contentEl.textContent,
+  };
+}
 
 export function watchCellExpanded(
   cb: (action: "deleted" | "created", data?: CellExpandedPayload) => void
@@ -36,16 +49,14 @@ export function watchCellExpanded(
           contentEl = el?.querySelector(CSS_SELECTOR_CHILD_CONTENT_FIELD);
           return contentEl !== null;
         },
-        { intervalMs: 20, timeoutMs: 2000 }
+        { intervalMs: 20, timeoutMs: 4000 }
       );
       if (!contentEl) return;
-      cb("created", {
-        contentEl: contentEl,
-        fieldEl: el?.querySelector(CSS_SELECTOR_CHILD_MULTILINE_FIELD),
-        text: contentEl.textContent,
-      });
+
+      const fieldEl: HTMLDivElement = el?.querySelector(
+        CSS_SELECTOR_CHILD_MULTILINE_FIELD
+      );
+      cb("created", createMultilinePayload(fieldEl));
     }
   );
 }
-
-const X = `div[data-columntype="multilineText"]`;

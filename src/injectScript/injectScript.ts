@@ -2,6 +2,7 @@ import { injectTextEditorOnCellExpended } from "./injectors/injectTextEditorOnCe
 import { createTextEditor } from "./textEditor/textEditor";
 import { addCssStyle, createHtmlElement, println, sleep } from "./utils";
 import { watchCellExpanded } from "./watchers/watchCellExpanded";
+import { watchDetailViewOpened } from "./watchers/watchDetailViewOpened";
 
 const defaultText = `? words ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------{"time":1645653752433,"blocks":[{"id":"0nrdNobmJW","type":"paragraph","data":{"text":"oklmssddsss"}},{"id":"i56k-mHVNq","type":"paragraph","data":{"text":"je suis un je&nbsp;"}}],"version":"2.23.2"}`;
 const ID_EDITOR = "web-ext-text-editor";
@@ -81,8 +82,18 @@ async function mainApp() {
 
   watchCellExpanded((action, payload) => {
     if (action === "deleted") return;
+    console.log("watchCellExpanded", payload);
     const payloadInjector = injectTextEditorOnCellExpended(payload);
     buildTextEditor(payloadInjector);
+  });
+
+  watchDetailViewOpened((action, payload) => {
+    if (action === "deleted") return;
+    console.log("watchDetailViewOpened", payload.multilineRows);
+    payload.multilineRows.forEach((row) => {
+      const payloadInjector = injectTextEditorOnCellExpended(row);
+      buildTextEditor(payloadInjector);
+    });
   });
 }
 
