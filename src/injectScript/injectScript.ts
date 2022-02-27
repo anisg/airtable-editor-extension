@@ -63,22 +63,7 @@ function buildTextEditor({
   text,
   airtableContentEl,
 }: BuildTextEditorPayload) {
-  console.log("build text editor");
-  sleep(3000).then(() => {
-    updateAirtableCell({ text: "TEST", contentEl: airtableContentEl });
-  });
-  return;
-  console.log("insert HTML", editorContainerEl);
   insertTextEditorEl(editorContainerEl);
-
-  airtableContentEl.addEventListener("paste", (event) => {
-    console.log("PASTE", event);
-  });
-
-  airtableContentEl.addEventListener("focus", (event) => {
-    console.log("FOCUS", event);
-  });
-
   createTextEditor({
     id: ID_EDITOR,
     text,
@@ -95,8 +80,9 @@ async function mainApp() {
   fixEditorJsCss();
 
   watchCellExpanded((action, payload) => {
-    action === "created" &&
-      injectTextEditorOnCellExpended(payload, buildTextEditor);
+    if (action === "deleted") return;
+    const payloadInjector = injectTextEditorOnCellExpended(payload);
+    buildTextEditor(payloadInjector);
   });
 }
 
