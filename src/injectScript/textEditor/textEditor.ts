@@ -13,8 +13,7 @@ const CodeTool = require("@editorjs/code");
 
 const prefixSeparator =
   "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
-const genPrefix = (wordsCound = "?") =>
-  `${wordsCound} words ${prefixSeparator}`;
+const genPrefix = () => `${prefixSeparator}`;
 
 function getEditorJsDataFromText(text?: string): OutputData {
   if (!text) return null;
@@ -61,6 +60,7 @@ class TextEditor {
         console.log("EVENT ON CHANGE", api, event);
         this.debouncedSave();
       },
+      logLevel: "ERROR",
       onReady: () => {
         new Undo({ editor: this.editor });
         new DragDrop(this.editor);

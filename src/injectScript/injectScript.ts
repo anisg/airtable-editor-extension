@@ -81,13 +81,17 @@ function fixEditorJsCss() {
   top: 30px;
 }
 
+.ce-code__textarea {
+  min-height: 100px !important;
+}
+
   `);
 }
 function insertTextEditorEl(parentEl: Element) {
   parentEl.appendChild(
     createHtmlElement(`
     <div style="width:100%; height:100%;">
-        <div id="${ID_EDITOR}"></div>
+        <div id="${ID_EDITOR}" class="baymax"></div>
     </div>
   `)
   );
@@ -126,22 +130,39 @@ function buildTextEditor({
   });
 }
 
-async function mainApp() {
-  await sleep(500);
+function detectTablePageChange(cb: () => void) {
+  /* we are waiting until we are inside Table page */
+  let url = window.location.href;
+  ["click", "popstate", "onload"].forEach((evt) =>
+    window.addEventListener(
+      evt,
+      function () {
+        requestAnimationFrame(() => {
+          if (url !== location.href) {
+            cb();
+          }
+          url = location.href;
+        });
+      },
+      true
+    )
+  );
+}
 
+async function watchEventsOnTablePage() {
   bootstrapAirtableCss();
   fixEditorJsCss();
 
   watchCellExpanded((action, payload) => {
     if (action === "deleted") return;
-    console.log("watchCellExpanded", payload);
+    println("watchCellExpanded", payload);
     const payloadInjector = injectTextEditorOnCellExpended(payload);
     buildTextEditor(payloadInjector);
   });
 
   watchDetailViewOpened((action, payload) => {
     if (action === "deleted") return;
-    console.log("watchDetailViewOpened", payload.multilineRows);
+    println("watchDetailViewOpened", payload.multilineRows);
     payload.multilineRows.forEach((row) => {
       const payloadInjector = injectTextEditorOnCellExpended(row);
       buildTextEditor(payloadInjector);
@@ -149,4 +170,12 @@ async function mainApp() {
   });
 }
 
-mainApp();
+/* entry point of the script */
+async function main() {
+  // detectTablePageChange(() => watchEventsOnTablePage());
+  window.addEventListener("load", async () => {
+    watchEventsOnTablePage();
+  });
+}
+
+main();

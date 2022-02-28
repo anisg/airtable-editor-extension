@@ -250,11 +250,19 @@ export function addCssStyle(styleString: string) {
   document.head.append(style);
 }
 
+const mutationObserversMap: Record<string, MutationObserver> = {};
+
 export function triggerEventOnSpecificChild(
+  mutationObserverId: string,
   targetNode: Element,
   childCssSelector,
   callback: (eventAction: "created" | "deleted", childEl: Element) => void
 ) {
+  if (mutationObserverId in mutationObserversMap) {
+    console.log("stop observer", mutationObserverId);
+    mutationObserversMap[mutationObserverId].disconnect();
+    delete mutationObserversMap[mutationObserverId];
+  }
   var config = {
     attributes: true,
     childList: true,
@@ -277,6 +285,7 @@ export function triggerEventOnSpecificChild(
       removedEl && callback("deleted", null);
     });
   });
+  mutationObserversMap[mutationObserverId] = observer;
   observer.observe(targetNode, config);
 }
 

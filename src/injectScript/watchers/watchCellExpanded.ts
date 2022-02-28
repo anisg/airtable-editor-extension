@@ -5,7 +5,7 @@ import {
   triggerEventOnSpecificChild,
 } from "../utils";
 
-const CSS_SELECTOR_HYPERBASE_CONTAINER = `#hyperbaseContainer`;
+export const CSS_SELECTOR_HYPERBASE_CONTAINER = `#hyperbaseContainer`;
 const CSS_SELECTOR_CHILD_TOP_LAYER = `div.noevents.child-events`;
 export const CSS_SELECTOR_CHILD_MULTILINE_FIELD = `div[data-columntype="multilineText"]`;
 const CSS_SELECTOR_CHILD_CONTENT_FIELD = `div[data-columntype="multilineText"] .contentEditableTextbox`;
@@ -39,6 +39,7 @@ export function watchCellExpanded(
   const hyperbaseContainer = getHyperBaseContainerEl();
 
   triggerEventOnSpecificChild(
+    "cellExpanded",
     hyperbaseContainer,
     CSS_SELECTOR_CHILD_TOP_LAYER,
     async (action, el) => {
