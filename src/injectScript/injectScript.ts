@@ -30,6 +30,31 @@ function fixEditorJsCss() {
     right: 100% !important;
 }
 
+/* by default editorJs has padding bottom at 300px */
+.codex-editor__redactor {
+  padding-bottom: 20px !important;
+}
+.ce-toolbox {
+  display: none !important;
+}
+.ce-toolbox--opened {
+  display: flex !important;
+}
+
+.ce-inline-toolbar {
+  display: none !important;
+}
+
+
+.ce-inline-toolbar--showed {
+  display: block !important;
+}
+
+/* for some reason, airtable was reseting the list style */
+.cdx-list__item {
+  list-style: inherit !important;
+}
+
 /* works only for detail view */
 #${ID_EDITOR} [contenteditable='true'] {
   border-width: 0 !important;
@@ -38,6 +63,22 @@ function fixEditorJsCss() {
 .ce-settings {
   -webkit-box-sizing: content-box !important;
   box-sizing: content-box !important;
+}
+
+/* fix checkbox icon weird position on detail view */
+.DetailViewWithActivityFeed .cdx-checklist__item-checkbox::after {
+  top: 5px !important;
+  left: 4px !important;
+}
+
+.ce-toolbar__actions {
+  flex-direction: column-reverse !important;
+}
+
+/* I wasn't able to display the settings popup, so I moved it to bottom */
+.DetailViewWithActivityFeed .ce-settings.ce-settings--opened {
+  right: unset;
+  top: 30px;
 }
 
   `);

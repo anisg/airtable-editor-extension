@@ -7,12 +7,33 @@ const Header = require("@editorjs/header");
 const SimpleImage = require("@editorjs/simple-image");
 const List = require("@editorjs/list");
 const Checklist = require("@editorjs/checklist");
-const Quote = require("@editorjs/quote");
+const Marker = require("@editorjs/marker");
+const InlineCode = require("@editorjs/inline-code");
+const CodeTool = require("@editorjs/code");
 
 const prefixSeparator =
   "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
 const genPrefix = (wordsCound = "?") =>
   `${wordsCound} words ${prefixSeparator}`;
+
+function getEditorJsDataFromText(text?: string): OutputData {
+  if (!text) return null;
+  const [header, content] = text.split(prefixSeparator);
+  if (!content || content.length == 0) {
+    //we do nothing
+    return null;
+  }
+
+  const outData: OutputData = JSON.parse(content.trim());
+  if (outData.blocks.length === 0) return null;
+  return outData;
+  // if (outData.blocks.length === 0) {
+  //   this.editor.render({
+  //     ...outData,
+  //     blocks: [{ id: "Ez1b6CwM8T", type: "paragraph", data: { text: "" } }],
+  //   });
+  // } else {
+}
 
 type TextEditorParams = {
   id: string;
@@ -23,7 +44,7 @@ class TextEditor {
   debouncedSave: ReturnType<typeof debounceImmediate>;
   editor: IEditorJS;
 
-  constructor({ id, onChange }: TextEditorParams) {
+  constructor({ id, onChange, text }: TextEditorParams) {
     this.debouncedSave = debounceImmediate(async () => {
       console.log("called onSaveSync!");
       const resp = await this.editor.save();
@@ -44,10 +65,18 @@ class TextEditor {
         new Undo({ editor: this.editor });
         new DragDrop(this.editor);
       },
+      data: getEditorJsDataFromText(text),
       tools: {
         header: Header,
         image: SimpleImage,
-        quote: Quote,
+        marker: {
+          class: Marker,
+          shortcut: "CMD+SHIFT+M",
+        },
+        inlineCode: {
+          class: InlineCode,
+          shortcut: "CMD+SHIFT+L",
+        },
         list: {
           class: List,
           inlineToolbar: true,
@@ -56,29 +85,17 @@ class TextEditor {
           class: Checklist,
           inlineToolbar: true,
         },
+        code: CodeTool,
       },
     });
   }
 
   setText(text: string) {
-    const [header, content] = text.split(prefixSeparator);
-    if (!content || content.length == 0) {
-      //we do nothing
-      return;
-    }
-    // try {
-    const outData: OutputData = JSON.parse(content.trim());
-    // if (outData.blocks.length === 0) {
-    //   this.editor.render({
-    //     ...outData,
-    //     blocks: [{ id: "Ez1b6CwM8T", type: "paragraph", data: { text: "" } }],
-    //   });
-    // } else {
-    this.editor.render(outData);
     // }
     // } catch (e) {
     //   console.log("failed to get", e);
     // }
+    this.editor.render(getEditorJsDataFromText(text));
   }
 }
 
@@ -87,9 +104,7 @@ export function createTextEditor({
   onChange,
   text,
 }: TextEditorParams): TextEditor {
-  const editor = new TextEditor({ id, onChange });
-  editor.editor.isReady.then(async () => {
-    text && editor.setText(text);
-  });
+  const editor = new TextEditor({ id, onChange, text });
+  editor.editor.isReady.then(async () => {});
   return editor;
 }
