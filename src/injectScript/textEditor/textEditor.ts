@@ -4,6 +4,10 @@ const Undo = require("editorjs-undo");
 const DragDrop = require("editorjs-drag-drop");
 const EditorJS = require("./editor");
 const Header = require("@editorjs/header");
+const SimpleImage = require("@editorjs/simple-image");
+const List = require("@editorjs/list");
+const Checklist = require("@editorjs/checklist");
+const Quote = require("@editorjs/quote");
 
 const prefixSeparator =
   "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
@@ -42,6 +46,16 @@ class TextEditor {
       },
       tools: {
         header: Header,
+        image: SimpleImage,
+        quote: Quote,
+        list: {
+          class: List,
+          inlineToolbar: true,
+        },
+        checklist: {
+          class: Checklist,
+          inlineToolbar: true,
+        },
       },
     });
   }
@@ -54,7 +68,14 @@ class TextEditor {
     }
     // try {
     const outData: OutputData = JSON.parse(content.trim());
+    // if (outData.blocks.length === 0) {
+    //   this.editor.render({
+    //     ...outData,
+    //     blocks: [{ id: "Ez1b6CwM8T", type: "paragraph", data: { text: "" } }],
+    //   });
+    // } else {
     this.editor.render(outData);
+    // }
     // } catch (e) {
     //   console.log("failed to get", e);
     // }
