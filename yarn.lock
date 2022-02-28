@@ -578,6 +578,16 @@
   "resolved" "https://registry.yarnpkg.com/duplexer/-/duplexer-0.1.2.tgz"
   "version" "0.1.2"
 
+"editorjs-drag-drop@^1.0.3":
+  "integrity" "sha512-yFosdTVRa07+zNG4KGvRs0dMrRR1VQqvU+VG4+GshhGUEaasF6YwAfyTEEC5SDiRFu4PSVzVW29Fn4p8YKzHPA=="
+  "resolved" "https://registry.npmjs.org/editorjs-drag-drop/-/editorjs-drag-drop-1.0.3.tgz"
+  "version" "1.0.3"
+
+"editorjs-undo@^2.0.0-rc.0":
+  "integrity" "sha512-YI+PqPyZAOYrPy81Oj4mfdTaBqEJgBJnTQk6nh7pjErhqNw5B9QoYXPlyzxKboHmgHq15qbIwqCUj4m9+oY7HQ=="
+  "resolved" "https://registry.npmjs.org/editorjs-undo/-/editorjs-undo-2.0.0-rc.0.tgz"
+  "version" "2.0.0-rc.0"
+
 "electron-to-chromium@^1.4.71":
   "integrity" "sha512-Hk61vXXKRb2cd3znPE9F+2pLWdIOmP7GjiTj45y6L3W/lO+hSnUSUhq+6lEaERWBdZOHbk2s3YV5c9xVl3boVw=="
   "resolved" "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.71.tgz"

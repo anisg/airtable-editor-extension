@@ -1,5 +1,7 @@
 import { debounceImmediate, sleep } from "../utils";
 import IEditorJS, { API, OutputData } from "./types";
+const Undo = require("editorjs-undo");
+const DragDrop = require("editorjs-drag-drop");
 const EditorJS = require("./editor");
 const Header = require("@editorjs/header");
 
@@ -34,7 +36,10 @@ class TextEditor {
         console.log("EVENT ON CHANGE", api, event);
         this.debouncedSave();
       },
-
+      onReady: () => {
+        new Undo({ editor: this.editor });
+        new DragDrop(this.editor);
+      },
       tools: {
         header: Header,
       },
