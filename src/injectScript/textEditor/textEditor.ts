@@ -1,4 +1,4 @@
-import { debounceImmediate, sleep } from "../utils";
+import { debounceImmediate, println, sleep } from "../utils";
 import IEditorJS, { API, OutputData } from "./types";
 const Undo = require("editorjs-undo");
 const DragDrop = require("editorjs-drag-drop");
@@ -45,7 +45,7 @@ class TextEditor {
 
   constructor({ id, onChange, text }: TextEditorParams) {
     this.debouncedSave = debounceImmediate(async () => {
-      console.log("called onSaveSync!");
+      println("called onSaveSync!");
       const resp = await this.editor.save();
       onChange(`${genPrefix()}${JSON.stringify(resp)}`);
     }, 500);
@@ -57,7 +57,7 @@ class TextEditor {
       holder: id,
       placeholder: "about...",
       onChange: (api: API, event: CustomEvent) => {
-        console.log("EVENT ON CHANGE", api, event);
+        println("EVENT ON CHANGE", api, event);
         this.debouncedSave();
       },
       logLevel: "ERROR",

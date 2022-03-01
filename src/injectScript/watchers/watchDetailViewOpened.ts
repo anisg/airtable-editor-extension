@@ -51,7 +51,6 @@ async function findAllMultilineFields(
   await repeatWhileNotTrue(
     () => {
       const x = dialogActivityIndicatorEl.classList.contains("hide");
-      console.log("N>", x);
       return x;
     },
     { intervalMs: 20, timeoutMs: 4000 }
@@ -81,7 +80,7 @@ async function triggerIfCurrentPageIsDetailViewDialog(
     `${CSS_SELECTOR_HYPERBASE_CONTAINER} > div:not([class]) div[aria-label="Detail view dialog"]`
   );
   if (!dialogEl) return;
-  console.log("current page is multiline fields");
+  println("current page is multiline fields");
   findAllMultilineFields(dialogEl, cb);
 }
 
