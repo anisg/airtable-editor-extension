@@ -1,4 +1,6 @@
 import { debounceImmediate, println, sleep } from "../utils";
+import { editorJsDataToMarkdownStr } from "./markdownParser/editorJsDataToMarkdownStr";
+import { markdownStrToEditorJsData } from "./markdownParser/markdownStrToEditorJsData";
 import IEditorJS, { API, OutputData } from "./types";
 const Undo = require("editorjs-undo");
 const DragDrop = require("editorjs-drag-drop");
@@ -10,29 +12,6 @@ const Checklist = require("@editorjs/checklist");
 const Marker = require("@editorjs/marker");
 const InlineCode = require("@editorjs/inline-code");
 const CodeTool = require("@editorjs/code");
-
-const prefixSeparator =
-  "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
-const genPrefix = () => `${prefixSeparator}`;
-
-function getEditorJsDataFromText(text?: string): OutputData {
-  if (!text) return null;
-  const [header, content] = text.split(prefixSeparator);
-  if (!content || content.length == 0) {
-    //we do nothing
-    return null;
-  }
-
-  const outData: OutputData = JSON.parse(content.trim());
-  if (outData.blocks.length === 0) return null;
-  return outData;
-  // if (outData.blocks.length === 0) {
-  //   this.editor.render({
-  //     ...outData,
-  //     blocks: [{ id: "Ez1b6CwM8T", type: "paragraph", data: { text: "" } }],
-  //   });
-  // } else {
-}
 
 type TextEditorParams = {
   id: string;
@@ -46,8 +25,9 @@ class TextEditor {
   constructor({ id, onChange, text }: TextEditorParams) {
     this.debouncedSave = debounceImmediate(async () => {
       println("called onSaveSync!");
-      const resp = await this.editor.save();
-      onChange(`${genPrefix()}${JSON.stringify(resp)}`);
+      const outputData = await this.editor.save();
+      const mdContent = editorJsDataToMarkdownStr(outputData);
+      onChange(mdContent);
     }, 500);
 
     this.editor = new EditorJS({
@@ -65,7 +45,7 @@ class TextEditor {
         new Undo({ editor: this.editor });
         new DragDrop(this.editor);
       },
-      data: getEditorJsDataFromText(text),
+      data: markdownStrToEditorJsData(text),
       tools: {
         header: Header,
         image: SimpleImage,
@@ -91,11 +71,7 @@ class TextEditor {
   }
 
   setText(text: string) {
-    // }
-    // } catch (e) {
-    //   console.log("failed to get", e);
-    // }
-    this.editor.render(getEditorJsDataFromText(text));
+    this.editor.render(markdownStrToEditorJsData(text));
   }
 }
 
