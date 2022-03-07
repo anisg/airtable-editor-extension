@@ -5,12 +5,15 @@ import { parseMarkdownToList } from "./BlockTypeParsers/ListTypeParser";
 import { parseMarkdownToDelimiter } from "./BlockTypeParsers/DelimiterTypeParser";
 import { parseMarkdownToCode } from "./BlockTypeParsers/CodeTypeParser";
 import { parseMarkdownToQuote } from "./BlockTypeParsers/QuoteTypeParser";
+import { println } from "../../utils";
 
-console.log("remark", remark);
 export function markdownStrToEditorJsData(content: string) {
   const blocks = [];
   const parsedMarkdown = remark.remark().parse(content);
   // iterating over the pared remarkjs syntax tree and executing the json parsers
+  println(`markdown -> editorjs`);
+  println(content);
+  println("parsedMarkdown", parsedMarkdown);
   parsedMarkdown.children.forEach((item) => {
     switch (item.type) {
       case "heading":

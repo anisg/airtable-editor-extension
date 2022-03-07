@@ -2,32 +2,33 @@ export function parseParagraphToMarkdown(blocks) {
   return `${blocks.text}\n`;
 }
 
-export function parseMarkdownToParagraph(blocks) {
-  let paragraphData = {};
+type TextBlock = { position: any; type: "text"; value: string };
+type HtmlBlock = { position: any; type: "html"; value: string };
 
-  if (blocks.type === 'paragraph') {
-    blocks.children.forEach((item) => {
-      if (item.type === 'text') {
-        paragraphData = {
-          data: {
-            text: item.value,
-          },
-          type: 'paragraph',
-        };
-      }
-      if (item.type === 'image') {
-        paragraphData = {
-          data: {
-            caption: item.title,
-            stretched: false,
-            url: item.url,
-            withBackground: false,
-            withBorder: false,
-          },
-          type: 'image',
-        };
-      }
-    });
+function buildTextFromChildrenBlocks(
+  blocks: (TextBlock | HtmlBlock)[]
+): string {
+  return blocks.map((block) => block.value).join("");
+}
+
+export function parseMarkdownToParagraph(blocks) {
+  let imageBlock = null;
+  if ((imageBlock = blocks.children.find((block) => block.type === "image"))) {
+    return {
+      data: {
+        caption: imageBlock.title,
+        stretched: false,
+        url: imageBlock.url,
+        withBackground: false,
+        withBorder: false,
+      },
+      type: "image",
+    };
   }
-  return paragraphData;
+  return {
+    data: {
+      text: buildTextFromChildrenBlocks(blocks.children),
+    },
+    type: "paragraph",
+  };
 }

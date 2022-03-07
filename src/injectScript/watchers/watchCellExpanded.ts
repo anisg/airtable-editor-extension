@@ -29,7 +29,7 @@ export function createMultilinePayload(
   return {
     contentEl,
     fieldEl: fieldEl,
-    text: contentEl.textContent,
+    text: contentEl.innerText,
   };
 }
 

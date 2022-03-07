@@ -1,3 +1,4 @@
+import { println } from "../../utils";
 import { OutputData } from "../types";
 import { parseCheckboxToMarkdown } from "./BlockTypeParsers/CheckboxTypeParser";
 import { parseCodeToMarkdown } from "./BlockTypeParsers/CodeTypeParser";
@@ -12,6 +13,8 @@ export function editorJsDataToMarkdownStr(data: OutputData) {
   const initialData: any = {};
 
   initialData.content = data.blocks;
+  println("editorJs -> markdown");
+  println("data", data);
 
   const parsedData = initialData.content.map((item) => {
     // iterate through editor data and parse the single blocks to markdown syntax
@@ -40,5 +43,7 @@ export function editorJsDataToMarkdownStr(data: OutputData) {
   });
 
   // take parsed data and create a markdown file
-  return parsedData.join("\n");
+  const resp = parsedData.join("\n");
+  println("resp->", resp);
+  return resp;
 }
