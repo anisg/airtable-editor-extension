@@ -18,6 +18,29 @@ type TextEditorParams = {
   onChange: (text: string) => any;
   text?: string;
 };
+
+const legacyPrefixSeparator =
+  "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------";
+
+function getEditorJsDataFromJsonText(text?: string): OutputData {
+  if (!text) return null;
+  const [header, content] = text.split(legacyPrefixSeparator);
+  if (!content || content.length == 0) {
+    //we do nothing
+    return null;
+  }
+  const outData: OutputData = JSON.parse(content.trim());
+  if (outData.blocks.length === 0) return null;
+  return outData;
+}
+
+function parseTextToData(text: string) {
+  // legacy: if starts with "---..." means it's pure json
+  if (text.startsWith(legacyPrefixSeparator)) {
+    return getEditorJsDataFromJsonText(text);
+  }
+  return markdownStrToEditorJsData(text);
+}
 class TextEditor {
   debouncedSave: ReturnType<typeof debounceImmediate>;
   editor: IEditorJS;
@@ -45,7 +68,7 @@ class TextEditor {
         new Undo({ editor: this.editor });
         new DragDrop(this.editor);
       },
-      data: markdownStrToEditorJsData(text),
+      data: parseTextToData(text),
       tools: {
         header: Header,
         image: SimpleImage,
