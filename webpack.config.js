@@ -18,6 +18,9 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: "ts-loader",
+        options: {
+          ignoreDiagnostics: [1128, 1005],
+        },
       },
     ],
   },
