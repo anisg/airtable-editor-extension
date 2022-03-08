@@ -1,6 +1,7 @@
 export type ID = string;
 
-export const println = (...args) => {};
+// export const println = (...args) => {};
+export const println = console.log;
 export const jdump = (obj: any) => JSON.stringify(obj, null, 2);
 export function isMacintosh() {
   return navigator.platform.indexOf("Mac") > -1;

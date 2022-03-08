@@ -5,7 +5,7 @@ export function parseParagraphToMarkdown(blocks) {
 type TextBlock = { position: any; type: "text"; value: string };
 type HtmlBlock = { position: any; type: "html"; value: string };
 
-function buildTextFromChildrenBlocks(
+export function buildTextFromChildrenBlocks(
   blocks: (TextBlock | HtmlBlock)[]
 ): string {
   return blocks.map((block) => block.value).join("");

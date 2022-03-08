@@ -1,3 +1,6 @@
+import { BlockContent, DefinitionContent, List } from "mdast";
+import { buildTextFromChildrenBlocks } from "./ParagraphTypeParser";
+
 export function parseListToMarkdown(blocks) {
   let items = {};
   switch (blocks.style) {
@@ -14,15 +17,14 @@ export function parseListToMarkdown(blocks) {
   }
 }
 
-export function parseMarkdownToList(blocks) {
+export function parseMarkdownToList(blocks: List) {
   let listData = {};
   const itemData = [];
 
   blocks.children.forEach((items) => {
-    items.children.forEach((listItem) => {
-      listItem.children.forEach((listEntry) => {
-        itemData.push(listEntry.value);
-      });
+    items.children.forEach((listItem: any) => {
+      const text = buildTextFromChildrenBlocks(listItem.children);
+      itemData.push(text);
     });
   });
 

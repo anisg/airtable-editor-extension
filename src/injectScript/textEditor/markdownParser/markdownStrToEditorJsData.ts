@@ -6,6 +6,10 @@ import { parseMarkdownToDelimiter } from "./BlockTypeParsers/DelimiterTypeParser
 import { parseMarkdownToCode } from "./BlockTypeParsers/CodeTypeParser";
 import { parseMarkdownToQuote } from "./BlockTypeParsers/QuoteTypeParser";
 import { println } from "../../utils";
+import {
+  isCheckboxList,
+  parseMarkdownToChecklist,
+} from "./BlockTypeParsers/CheckboxTypeParser";
 
 export function markdownStrToEditorJsData(content: string) {
   const blocks = [];
@@ -21,6 +25,9 @@ export function markdownStrToEditorJsData(content: string) {
       case "paragraph":
         return blocks.push(parseMarkdownToParagraph(item));
       case "list":
+        if (isCheckboxList(item)) {
+          return blocks.push(parseMarkdownToChecklist(item));
+        }
         return blocks.push(parseMarkdownToList(item));
       case "thematicBreak":
         return blocks.push(parseMarkdownToDelimiter());

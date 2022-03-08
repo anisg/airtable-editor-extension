@@ -1,6 +1,6 @@
 {
   "name": "Airtable Rich Text Editor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "manifest_version": 3,
   "description": "",
   "icons": {
@@ -15,7 +15,7 @@
       "js": ["injectScript.js"]
     }
   ],
-  "permissions": ["activeTab"],
+  "permissions": [],
   "host_permissions": ["https://*.airtable.com/app*"],
   "web_accessible_resources": [
     {
